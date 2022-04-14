@@ -5,12 +5,11 @@ import Homepage from "./Homepage";
 import Header from "./Header";
 import Profile from "./Profile";
 import Signin from "./Signin";
-// import Auth0Provider from "./Auth0Provider";
+import Quotes from "./Quotes";
 
 const App = () => {
   return (
     <BrowserRouter>
-      {/* <Auth0Provider> */}
       <GlobalStyles />
       <Header />
       <Switch>
@@ -20,11 +19,10 @@ const App = () => {
         <Route path="/profile/:id">
           <Profile />
         </Route>
-        {/* <Route exact path="/Signin">
-          <Signin />
-        </Route> */}
+        <Route path="/quotes">
+          <Quotes />
+        </Route>
       </Switch>
-      {/* </Auth0Provider> */}
     </BrowserRouter>
   );
 };
