@@ -35,13 +35,20 @@ const getUser = async (req, res) => {
   try {
     await client.connect();
     const db = client.db("Friends");
-    let { email } = req.params;
-    let user = await db.collection("Users").findOne({ email: email });
+    const { email } = req.params;
+    const user = await db.collection("Users").findOne({ email: email });
     console.log(user, email);
-    res.status(200).json({
-      status: 200,
-      data: user,
-    });
+    if (user) {
+      res.status(200).json({
+        status: 200,
+        data: user,
+      });
+    } else {
+      res.status(404).json({
+        status: 404,
+        message: "User not found!",
+      });
+    }
   } catch (err) {
     console.log(err.stack);
     res.status(404).json({
@@ -61,19 +68,29 @@ const getQuestions = async (req, res) => {
   });
 };
 
-// Posts a comment to the database
 const addComment = async (req, res) => {
+  // payload: { user: "userName", comment: "string" }
   const client = new MongoClient(MONGO_URI, options);
   await client.connect();
   const db = client.db("Friends");
   console.log("connected to db");
 
-  const comment = { ...req.body };
+  let params = { ...req.body };
 
+  if (!params.hasOwnProperty("user")) {
+    params = {
+      user: "Anonymous",
+      comment: params.comment,
+    };
+  }
+  console.log(params);
   try {
-    console.log(comment);
-    const result = await db.collection("Comments").insertOne(comment);
-    res.status(201).json({ status: 201, result: result });
+    const result = await db.collection("Comments").insertOne(params);
+    res.status(201).json({
+      status: 201,
+      result: result,
+      data: params,
+    });
   } catch (err) {
     res.status(500).json({ status: 500, error: err });
   }
@@ -82,17 +99,56 @@ const addComment = async (req, res) => {
   console.log("disconnected from db");
 };
 
+const getComments = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  try {
+    await client.connect();
+    const db = client.db("Friends");
+    console.log("connected to db");
+
+    const comments = await db.collection("Comments").find().toArray();
+
+    res.status(200).json({
+      status: 200,
+      result: comments,
+    });
+  } catch (err) {
+    res.status(500).json({ status: 500, error: err });
+  } finally {
+    client.close();
+    console.log("disconnected");
+  }
+};
+
 // If user doesn't exist in database, it inserts the user's info.
-// const createUser = async (req, res) => {
-//   let client = new MongoClient(MONGO_URI, options);
-//   try {}
-// }
+const createUser = async (req, res) => {
+  let client = new MongoClient(MONGO_URI, options);
+  try {
+    await client.connect();
+    const db = client.db("Friends");
+    console.log("connected!");
+    const user = await db
+      .collection("Users")
+      .insertOne({ ...req.body, likes: [], faved: [] });
+    res.status(201).json({
+      status: 201,
+      result: user,
+      message: "user created!",
+    });
+  } catch (err) {
+    res.status(500).json({ status: 500, error: err });
+  } finally {
+    client.close();
+    console.log("disconnected!");
+  }
+};
 
 module.exports = {
   getRandomQuote,
   getUser,
   getShowInfo,
-  addComment,
-  // postComment,
   getQuestions,
+  addComment,
+  getComments,
+  createUser,
 };

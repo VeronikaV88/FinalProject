@@ -31,6 +31,9 @@ const Quiz = () => {
 
   return (
     <MainWrapper>
+      <Instruction>
+        Are you a true Friends fan? Test your knowledge!
+      </Instruction>
       <div class="main">
         {showScore ? (
           <ScoreSection>
@@ -76,8 +79,16 @@ const Quiz = () => {
 const MainWrapper = styled.div`
   display: flex;
   justify-content: center;
+  flex-direction: column;
 `;
-
+const Instruction = styled.p`
+  display: flex;
+  justify-content: center;
+  margin: 50px;
+  font-family: Verdana, Tahoma, sans-serif;
+  text-align: center;
+  font-weight: bold;
+`;
 const ScoreSection = styled.div`
   display: flex;
   font-size: 24px;

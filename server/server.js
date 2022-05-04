@@ -9,8 +9,9 @@ const {
   getUser,
   getShowInfo,
   getQuestions,
-  // postComment,
+  createUser,
   addComment,
+  getComments,
 } = require("./handlers");
 
 express()
@@ -47,7 +48,8 @@ app.get("/api/getRandomQuote", getRandomQuote);
 app.get("/api/getUser/:email", getUser);
 app.get("/api/getShowInfo", getShowInfo);
 app.get("/api/getQuestions", getQuestions);
-// app.post("/api/postComment", postComment);
-app.post("/api/addComment/", addComment);
+app.post("/api/addComment", addComment);
+app.get("/api/getComments", getComments);
+app.post("/api/createUser", createUser);
 
 app.listen(PORT, () => console.log(`Listening on Port ${PORT}...`));

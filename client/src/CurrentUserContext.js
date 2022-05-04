@@ -18,9 +18,20 @@ export const CurrentUserProvider = ({ children }) => {
         .then((data) => {
           if (data.status === 200) {
             setCurrentUser(data.data);
-          }
-          if (data.status === 404) {
-            history.push("/UserSignup");
+          } else {
+            let response = fetch("/api/createUser", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+            })
+              .then((res) => {
+                return res.json();
+              })
+              .then((data) => {
+                console.log(data);
+              });
           }
         });
   }, [user]);
