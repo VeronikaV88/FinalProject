@@ -1,7 +1,8 @@
 import styled from "styled-components";
+import ShowInfo from "./ShowInfo";
 
 const Homepage = () => {
-  return <div>Hello</div>;
+  return <ShowInfo />;
 };
 
 export default Homepage;

@@ -9,14 +9,18 @@ const Signin = () => {
 };
 
 const Button = styled.button`
+  font-weight: bold;
+  font-family: Verdana, Tahoma, sans-serif;
+  text-decoration: none;
+  text-align: center;
   margin-top: 10px;
-  font-size: 15px;
+  font-size: 13px;
   border: black 1px solid;
   color: black;
   background-color: white;
   width: 100px;
   padding: 10px;
-  border-radius: 20px;
+  border-radius: 10px;
   &:hover {
     background-color: black;
     color: white;
